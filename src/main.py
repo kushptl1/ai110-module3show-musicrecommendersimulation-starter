@@ -10,13 +10,13 @@ You will implement the functions in recommender.py:
 """
 
 try:
-    from recommender import load_songs, recommend_songs
+    from recommender import load_songs, recommend_songs, build_adversarial_profiles
 except ImportError:
-    from src.recommender import load_songs, recommend_songs
+    from src.recommender import load_songs, recommend_songs, build_adversarial_profiles
 
 
 def main() -> None:
-    songs = load_songs("data/songs.csv") 
+    songs = load_songs("data/songs.csv")
 
     # Starter example profile
     user_prefs = {"genre": "pop", "mood": "happy", "energy": 0.8}
@@ -30,6 +30,13 @@ def main() -> None:
         song, score, explanation = rec
         print(f"{song['title']} - Score: {score:.2f}")
         print(f"Because: {explanation}")
+        print()
+
+    print("\nAdversarial profiles:\n")
+    for profile in build_adversarial_profiles():
+        print(f"- {profile['name']}")
+        print(f"  Reason: {profile['reason']}")
+        print(f"  Preferences: {profile['user_prefs']}")
         print()
 
 

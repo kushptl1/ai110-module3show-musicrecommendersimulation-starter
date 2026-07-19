@@ -88,6 +88,56 @@ class Recommender:
         _, reasons = score_song(user_prefs, song_dict)
         return "; ".join(reasons)
 
+def build_adversarial_profiles() -> List[Dict]:
+    """
+    Create a handful of deliberately tricky user profiles to stress-test the scorer.
+    These are designed to surface edge cases such as conflicting preferences,
+    extreme values, or ambiguous acoustic settings.
+    """
+    return [
+        {
+            "name": "Conflicting energy and mood",
+            "user_prefs": {
+                "genre": "pop",
+                "mood": "sad",
+                "energy": 0.9,
+                "likes_acoustic": False,
+            },
+            "reason": "High energy but sad mood can create tension in matching logic.",
+        },
+        {
+            "name": "Extreme acoustic preference",
+            "user_prefs": {
+                "genre": "indie",
+                "mood": "chill",
+                "energy": 0.3,
+                "likes_acoustic": True,
+            },
+            "reason": "Strong acoustic preference may dominate softer tracks.",
+        },
+        {
+            "name": "Unknown genre with clear energy target",
+            "user_prefs": {
+                "genre": "unknown",
+                "mood": "happy",
+                "energy": 0.6,
+                "likes_acoustic": False,
+            },
+            "reason": "A missing genre should not prevent energy-based ranking.",
+        },
+        {
+            "name": "Noisy preference values",
+            "user_prefs": {
+                "genre": "rock",
+                "mood": "angry",
+                "energy": 1.2,
+                "likes_acoustic": True,
+            },
+            "reason": "Out-of-range energy values test whether the scorer clamps or misbehaves.",
+        },
+    ]
+
+
 def load_songs(csv_path: str) -> List[Dict]:
     """
     Loads songs from a CSV file.

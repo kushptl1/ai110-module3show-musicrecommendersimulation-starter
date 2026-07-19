@@ -1,4 +1,4 @@
-from src.recommender import Song, UserProfile, Recommender
+from src.recommender import Song, UserProfile, Recommender, build_adversarial_profiles
 
 def make_small_recommender() -> Recommender:
     songs = [
@@ -59,3 +59,14 @@ def test_explain_recommendation_returns_non_empty_string():
     explanation = rec.explain_recommendation(user, song)
     assert isinstance(explanation, str)
     assert explanation.strip() != ""
+
+
+def test_build_adversarial_profiles_returns_edge_case_examples():
+    profiles = build_adversarial_profiles()
+
+    assert len(profiles) >= 4
+    assert any(profile["name"] == "Conflicting energy and mood" for profile in profiles)
+    assert any(
+        profile["user_prefs"]["mood"] == "sad" and profile["user_prefs"]["energy"] == 0.9
+        for profile in profiles
+    )

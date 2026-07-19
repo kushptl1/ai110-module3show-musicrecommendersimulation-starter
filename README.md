@@ -2,16 +2,7 @@
 
 ## Project Summary
 
-In this project you will build and explain a small music recommender system.
-
-Your goal is to:
-
-- Represent songs and a user "taste profile" as data
-- Design a scoring rule that turns that data into recommendations
-- Evaluate what your system gets right and wrong
-- Reflect on how this mirrors real world AI recommenders
-
-Replace this paragraph with your own summary of what your version does.
+This project builds a small content-based music recommender. It reads a catalog of songs, compares each one to a user profile, and ranks the best matches. The system is simple, explainable, and designed to show how recommender systems make choices from structured data.
 
 ---
 
@@ -77,55 +68,67 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Sample Recommendation Output
 
-Paste a sample of your recommender's output here as a text block so a reader can see what it produces:
-
 ```
-# e.g.:
-# User profile: genre=indie, mood=chill, energy=low
-# Recommendations:
-#   1. ...
-#   2. ...
-#   3. ...
-```
+Loaded songs: 20
 
-**Screenshot or video** *(optional)*: <!-- Insert a screenshot or demo video link here -->
+Top recommendations:
+
+Sunrise City - Score: 5.98
+Because: genre match (+2.0); mood match (+2.0); energy closeness (+0.98); acoustic preference (+1.0)
+
+Rooftop Lights - Score: 3.96
+Because: mood match (+2.0); energy closeness (+0.96); acoustic preference (+1.0)
+
+Gym Hero - Score: 3.87
+Because: genre match (+2.0); energy closeness (+0.87); acoustic preference (+1.0)
+
+Silver Static - Score: 1.98
+Because: energy closeness (+0.98); acoustic preference (+1.0)
+
+Sunlit Harbor - Score: 1.96
+Because: energy closeness (+0.96); acoustic preference (+1.0)
+
+
+Adversarial profiles:
+
+- Conflicting energy and mood
+  Reason: High energy but sad mood can create tension in matching logic.
+  Preferences: {'genre': 'pop', 'mood': 'sad', 'energy': 0.9, 'likes_acoustic': False}
+
+- Extreme acoustic preference
+  Reason: Strong acoustic preference may dominate softer tracks.
+  Preferences: {'genre': 'indie', 'mood': 'chill', 'energy': 0.3, 'likes_acoustic': True}
+
+- Unknown genre with clear energy target
+  Reason: A missing genre should not prevent energy-based ranking.
+  Preferences: {'genre': 'unknown', 'mood': 'happy', 'energy': 0.6, 'likes_acoustic': False}
+
+- Noisy preference values
+  Reason: Out-of-range energy values test whether the scorer clamps or misbehaves.
+  Preferences: {'genre': 'rock', 'mood': 'angry', 'energy': 1.2, 'likes_acoustic': True}
+```
 
 ---
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
-
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+I tested the recommender with a few different user profiles. I checked a normal profile with clear genre and mood preferences, and I also tested edge cases with conflicting preferences such as high energy and a sad mood. I looked at whether the explanations made sense and whether the top results felt reasonable for each profile.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+This recommender only works on a small music catalog, so it may not generalize well to a larger library. It does not use listening history, lyrics, or cultural context, so it can miss important parts of a user’s taste. It may also over-focus on a few simple features such as genre and mood, which can create narrow or repetitive recommendations.
 
 ---
 
 ## Reflection
 
-Read and complete `model_card.md`:
+Read `model_card.md`:
 
 [**Model Card**](model_card.md)
 
-Write 1 to 2 paragraphs here about what you learned:
-
-- about how recommenders turn data into predictions
-- about where bias or unfairness could show up in systems like this
+This project helped me understand how recommender systems turn simple features into predictions. I learned that even a small scoring rule can strongly shape what a user sees, and that bias can show up when the system rewards only a narrow set of patterns. It also made me think about how recommendation systems can feel helpful while still limiting a user’s exposure to new ideas.
 
 
 
